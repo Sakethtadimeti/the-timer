@@ -6,7 +6,11 @@ import { useEffect, useState, useRef } from "react";
 https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 */
 const App = () => {
-  const [currTime, setTime] = useState(10);
+  const [currTime, setTime] = useState(
+    localStorage.getItem("elapsedTime") >= 0
+      ? localStorage.getItem("elapsedTime")
+      : 10
+  );
   const [isPlaying, setPlaying] = useState(true);
 
   /*const intervalId = useInterval(() => setTime(currTime - 1), 1000);
@@ -28,12 +32,14 @@ const App = () => {
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
       setTime(currTime => currTime - 1);
+
       /* This wont work
       setTime(currTime+1)
       */
     }, 1000);
   };
   useEffect(() => {
+    localStorage.setItem("elapsedTime", currTime);
     if (currTime === 0) {
       stopTimer();
     }
